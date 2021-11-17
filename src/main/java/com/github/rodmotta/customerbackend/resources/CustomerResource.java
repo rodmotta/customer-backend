@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/customers")
@@ -33,8 +34,12 @@ public class CustomerResource {
     @ApiOperation(value = "Find all customers by carrer.")
     @GetMapping
     public ResponseEntity<Page<CustomerResponse>> findByCarrer(
-            @RequestParam String carrer,
-            @PageableDefault(12) Pageable pageable){
+            @RequestParam(required = false) String carrer,
+            @PageableDefault(12) Pageable pageable) {
+        if (Objects.isNull(carrer)) {
+            Page<CustomerResponse> response = customerService.findAll(pageable);
+            return ResponseEntity.ok().body(response);
+        }
         Page<CustomerResponse> response = customerService.findByCarrer(carrer, pageable);
         return ResponseEntity.ok().body(response);
     }

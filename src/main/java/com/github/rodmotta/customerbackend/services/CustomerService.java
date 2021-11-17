@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface CustomerService {
     CustomerResponse findById(Long id);
     Page<CustomerResponse> findByCarrer(String carrer, Pageable pageable);
+    Page<CustomerResponse> findAll(Pageable pageable);
     CustomerResponse save(CustomerRequest customerRequest);
     CustomerResponse update(Long id, CustomerRequest customerRequest);
     void delete(Long id);

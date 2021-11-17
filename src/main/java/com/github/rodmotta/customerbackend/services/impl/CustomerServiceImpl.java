@@ -31,6 +31,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Page<CustomerResponse> findAll(Pageable pageable) {
+        Page<Customer> customers = customerRepository.findAll(pageable);
+        return customers.map(customer -> CustomerResponse.convert(customer));
+    }
+
+    @Override
     public CustomerResponse save(CustomerRequest customerRequest) {
         Customer customer = customerRepository.save(CustomerRequest.convert(customerRequest));
         return CustomerResponse.convert(customer);
