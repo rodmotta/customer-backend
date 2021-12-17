@@ -1,7 +1,9 @@
-package com.github.rodmotta.customerbackend.config;
+package com.github.rodmotta.customerbackend.application.configurations;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -13,10 +15,23 @@ import java.util.ArrayList;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
-
 @Configuration
 @EnableSwagger2
+@PropertySource("classpath:swagger.properties")
 public class SwaggerConfig {
+
+    @Value("${swagger.title}")
+    private String title;
+    @Value("${swagger.description}")
+    private String description;
+    @Value("${swagger.version}")
+    private String version;
+    @Value("${swagger.name}")
+    private String name;
+    @Value("${swagger.github}")
+    private String github;
+    @Value("${swagger.email}")
+    private String email;
 
     @Bean
     public Docket api() {
@@ -30,12 +45,11 @@ public class SwaggerConfig {
 
     private ApiInfo metaInfo() {
         return new ApiInfo(
-                "Customer REST API",
-                "SpringBoot Rest API for customers registration.",
-                "1.0",
+                title,
+                description,
+                version,
                 "Terms of Service",
-                new Contact("Rodrigo Motta", "https://www.github.com/rodmotta",
-                        "rodmottaads@gmail.com"),
+                new Contact(name, github, email),
                 "Apache License Version 2.0",
                 "https://www.apache.org/licesen.html", new ArrayList<>()
         );

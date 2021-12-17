@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.config;
+package com.github.rodmotta.customerbackend.application.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
