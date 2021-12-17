@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.application.configurations;
+package com.github.rodmotta.customerbackend.adapters.configurations;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

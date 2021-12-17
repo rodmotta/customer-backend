@@ -1,14 +1,15 @@
-package com.github.rodmotta.customerbackend.core.services;
+package com.github.rodmotta.customerbackend.application.services;
 
-import com.github.rodmotta.customerbackend.core.domain.Customer;
-import com.github.rodmotta.customerbackend.core.ports.CustomerRepositoryPort;
-import com.github.rodmotta.customerbackend.core.ports.CustomerServicePort;
+import com.github.rodmotta.customerbackend.application.domain.Customer;
+import com.github.rodmotta.customerbackend.application.domain.PageInfo;
+import com.github.rodmotta.customerbackend.application.ports.CustomerRepositoryPort;
+import com.github.rodmotta.customerbackend.application.ports.CustomerServicePort;
 
 import java.util.List;
 
 public class CustomerService implements CustomerServicePort {
 
-    private CustomerRepositoryPort customerRepository;
+    private final CustomerRepositoryPort customerRepository;
 
     public CustomerService(CustomerRepositoryPort customerRepository) {
         this.customerRepository = customerRepository;
@@ -20,18 +21,18 @@ public class CustomerService implements CustomerServicePort {
     }
 
     @Override
-    public List<Customer> findByCarrer(String carrer) {
-        return customerRepository.findByCarrer(carrer);
+    public List<Customer> findByCarrer(String carrer, PageInfo pageInfo) {
+        return customerRepository.findByCarrer(carrer, pageInfo);
     }
 
     @Override
-    public List<Customer> findByFirstName(String firstName) {
-        return customerRepository.findByFirstName(firstName);
+    public List<Customer> findByFirstName(String firstName, PageInfo pageInfo) {
+        return customerRepository.findByFirstName(firstName, pageInfo);
     }
 
     @Override
-    public List<Customer> findAll() {
-        return customerRepository.findAll();
+    public List<Customer> findAll(PageInfo pageInfo) {
+        return customerRepository.findAll(pageInfo);
     }
 
     @Override

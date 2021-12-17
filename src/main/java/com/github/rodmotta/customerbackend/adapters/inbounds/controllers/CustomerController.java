@@ -1,12 +1,17 @@
-package com.github.rodmotta.customerbackend.adapters.inbound.controllers;
+package com.github.rodmotta.customerbackend.adapters.inbounds.controllers;
 
 import com.github.rodmotta.customerbackend.application.domain.Customer;
+import com.github.rodmotta.customerbackend.application.domain.PageInfo;
 import com.github.rodmotta.customerbackend.application.ports.CustomerServicePort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,23 +35,29 @@ public class CustomerController {
 
     @ApiOperation(value = "Find all customers.")
     @GetMapping
-    public ResponseEntity<Page<Customer>> findAll() {
-        List<Customer> customers = customerService.findAll();
-        return ResponseEntity.ok().body(new PageImpl<>(customers));
+    public ResponseEntity<Page<Customer>> findAll(@PageableDefault Pageable pageable) {
+        PageInfo pageInfo = new PageInfo();
+        BeanUtils.copyProperties(pageable, pageInfo);
+        List<Customer> customers = customerService.findAll(pageInfo);
+        return ResponseEntity.ok().body(new PageImpl<>(customers, pageable, customers.size()));
     }
 
     @ApiOperation(value = "Find customers by first name.")
     @GetMapping(params = "firstName")
-    public ResponseEntity<Page<Customer>> findByFirst(@RequestParam String firstName) {
-        List<Customer> response = customerService.findByFirstName(firstName);
-        return ResponseEntity.ok().body(new PageImpl<>(response));
+    public ResponseEntity<Page<Customer>> findByFirst(@PageableDefault Pageable pageable, @RequestParam String firstName) {
+        PageInfo pageInfo = new PageInfo();
+        BeanUtils.copyProperties(pageable, pageInfo);
+        List<Customer> customers = customerService.findByFirstName(firstName, pageInfo);
+        return ResponseEntity.ok().body(new PageImpl<>(customers, pageable, customers.size()));
     }
 
     @ApiOperation(value = "Find customers by carrer.")
     @GetMapping(params = "carrer")
-    public ResponseEntity<Page<Customer>> findByCarrer(@RequestParam String carrer) {
-        List<Customer> response = customerService.findByCarrer(carrer);
-        return ResponseEntity.ok().body(new PageImpl<>(response));
+    public ResponseEntity<Page<Customer>> findByCarrer(@PageableDefault Pageable pageable, @RequestParam String carrer) {
+        PageInfo pageInfo = new PageInfo();
+        BeanUtils.copyProperties(pageable, pageInfo);
+        List<Customer> customers = customerService.findByCarrer(carrer, pageInfo);
+        return ResponseEntity.ok().body(new PageImpl<>(customers, pageable, customers.size()));
     }
 
     @ApiOperation(value = "Save a customer.")
