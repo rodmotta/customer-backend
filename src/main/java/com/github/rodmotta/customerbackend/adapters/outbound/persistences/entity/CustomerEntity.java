@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.adapters.outbounds.persistences.entity;
+package com.github.rodmotta.customerbackend.adapters.outbound.persistences.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

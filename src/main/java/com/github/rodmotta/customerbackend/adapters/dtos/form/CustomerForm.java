@@ -8,14 +8,14 @@ import java.time.LocalDate;
 
 @Data
 public class CustomerForm {
-    @NotEmpty
+    @NotEmpty(message = "Must not be empty.")
     private String firstName;
-    @NotEmpty
+    @NotEmpty(message = "Must not be empty.")
     private String lastName;
     private LocalDate birthDate;
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "Must not be empty.")
+    @Email(message = "Must be a valid email address.")
     private String email;
-    @NotEmpty
+    @NotEmpty(message = "Must not be empty.")
     private String carrer;
 }

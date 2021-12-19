@@ -1,13 +1,14 @@
-package com.github.rodmotta.customerbackend.adapters.outbounds.persistences.repository;
+package com.github.rodmotta.customerbackend.adapters.outbound.persistences.repository;
 
-import com.github.rodmotta.customerbackend.adapters.outbounds.persistences.entity.CustomerEntity;
+import com.github.rodmotta.customerbackend.adapters.exception.NotFoundException;
+import com.github.rodmotta.customerbackend.adapters.outbound.persistences.entity.CustomerEntity;
 import com.github.rodmotta.customerbackend.application.domain.Customer;
 import com.github.rodmotta.customerbackend.application.domain.PageInfo;
 import com.github.rodmotta.customerbackend.application.domain.Pagination;
-import com.github.rodmotta.customerbackend.application.domain.exception.NotFoundException;
 import com.github.rodmotta.customerbackend.application.ports.CustomerRepositoryPort;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,10 +63,14 @@ public class CustomerRepository implements CustomerRepositoryPort {
 
     @Override
     public void delete(Long id) {
-        customerRepository.deleteById(id);
+        try {
+            customerRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException exception){
+            throw new NotFoundException("Customer not found.");
+        }
     }
 
-    private Pagination<Customer> convertTo(Page<CustomerEntity> customerPage){
+    private Pagination<Customer> convertTo(Page<CustomerEntity> customerPage) {
 
         List<Customer> customers = customerPage.getContent()
                 .stream()

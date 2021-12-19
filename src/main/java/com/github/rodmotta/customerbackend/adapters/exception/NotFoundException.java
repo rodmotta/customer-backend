@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.application.domain.exception;
+package com.github.rodmotta.customerbackend.adapters.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

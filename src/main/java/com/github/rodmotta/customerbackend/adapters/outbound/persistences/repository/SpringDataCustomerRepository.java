@@ -1,6 +1,6 @@
-package com.github.rodmotta.customerbackend.adapters.outbounds.persistences.repository;
+package com.github.rodmotta.customerbackend.adapters.outbound.persistences.repository;
 
-import com.github.rodmotta.customerbackend.adapters.outbounds.persistences.entity.CustomerEntity;
+import com.github.rodmotta.customerbackend.adapters.outbound.persistences.entity.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

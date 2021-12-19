@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.adapters.inbounds.controllers;
+package com.github.rodmotta.customerbackend.adapters.inbound.controllers;
 
 import com.github.rodmotta.customerbackend.adapters.dtos.form.CustomerForm;
 import com.github.rodmotta.customerbackend.adapters.dtos.view.CustomerView;
