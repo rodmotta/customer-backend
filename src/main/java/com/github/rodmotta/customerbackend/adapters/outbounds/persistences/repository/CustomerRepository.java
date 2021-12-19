@@ -3,6 +3,7 @@ package com.github.rodmotta.customerbackend.adapters.outbounds.persistences.repo
 import com.github.rodmotta.customerbackend.adapters.outbounds.persistences.entity.CustomerEntity;
 import com.github.rodmotta.customerbackend.application.domain.Customer;
 import com.github.rodmotta.customerbackend.application.domain.PageInfo;
+import com.github.rodmotta.customerbackend.application.domain.Pagination;
 import com.github.rodmotta.customerbackend.application.domain.exception.NotFoundException;
 import com.github.rodmotta.customerbackend.application.ports.CustomerRepositoryPort;
 import org.modelmapper.ModelMapper;
@@ -33,30 +34,24 @@ public class CustomerRepository implements CustomerRepositoryPort {
     }
 
     @Override
-    public List<Customer> findByCarrer(String carrer, PageInfo pageInfo) {
-        Pageable pageable = PageRequest.of(pageInfo.getPageNumber(), pageInfo.getPageSize());
-        Page<CustomerEntity> customerEntities = customerRepository.findByCarrerContainsIgnoreCase(carrer, pageable);
-        return customerEntities.stream()
-                .map(customer -> modelMapper.map(customer, Customer.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Customer> findByFirstName(String firstName, PageInfo pageInfo) {
-        Pageable pageable = PageRequest.of(pageInfo.getPageNumber(), pageInfo.getPageSize());
-        Page<CustomerEntity> customerEntities = customerRepository.findByFirstNameContainsIgnoreCase(firstName, pageable);
-        return customerEntities.stream()
-                .map(customer -> modelMapper.map(customer, Customer.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Customer> findAll(PageInfo pageInfo) {
-        Pageable pageable = PageRequest.of(pageInfo.getPageNumber(), pageInfo.getPageSize());
+    public Pagination<Customer> findAll(PageInfo pageInfo) {
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.valueOf(pageInfo.getDirection()), pageInfo.getSort());
         Page<CustomerEntity> customerEntities = customerRepository.findAll(pageable);
-        return customerEntities.stream()
-                .map(customer -> modelMapper.map(customer, Customer.class))
-                .collect(Collectors.toList());
+        return convertTo(customerEntities);
+    }
+
+    @Override
+    public Pagination<Customer> findByCarrer(String carrer, PageInfo pageInfo) {
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.valueOf(pageInfo.getDirection()), pageInfo.getSort());
+        Page<CustomerEntity> customerEntities = customerRepository.findByCarrerContainsIgnoreCase(carrer, pageable);
+        return convertTo(customerEntities);
+    }
+
+    @Override
+    public Pagination<Customer> findByFirstName(String firstName, PageInfo pageInfo) {
+        Pageable pageable = PageRequest.of(pageInfo.getPage(), pageInfo.getSize(), Sort.Direction.valueOf(pageInfo.getDirection()), pageInfo.getSort());
+        Page<CustomerEntity> customerEntities = customerRepository.findByFirstNameContainsIgnoreCase(firstName, pageable);
+        return convertTo(customerEntities);
     }
 
     @Override
@@ -68,5 +63,23 @@ public class CustomerRepository implements CustomerRepositoryPort {
     @Override
     public void delete(Long id) {
         customerRepository.deleteById(id);
+    }
+
+    private Pagination<Customer> convertTo(Page<CustomerEntity> customerPage){
+
+        List<Customer> customers = customerPage.getContent()
+                .stream()
+                .map(customerEntity -> modelMapper.map(customerEntity, Customer.class))
+                .collect(Collectors.toList());
+
+        Pagination<Customer> pagination = new Pagination<>();
+        pagination.setContent(customers);
+        pagination.setTotalPages(customerPage.getTotalPages());
+        pagination.setTotalElements(customerPage.getTotalElements());
+        pagination.setPageNumber(customerPage.getNumber());
+        pagination.setNumberOfElements(customerPage.getNumberOfElements());
+        pagination.setLast(customerPage.isLast());
+        pagination.setFirst(customerPage.isFirst());
+        return pagination;
     }
 }

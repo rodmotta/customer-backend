@@ -2,10 +2,9 @@ package com.github.rodmotta.customerbackend.application.services;
 
 import com.github.rodmotta.customerbackend.application.domain.Customer;
 import com.github.rodmotta.customerbackend.application.domain.PageInfo;
+import com.github.rodmotta.customerbackend.application.domain.Pagination;
 import com.github.rodmotta.customerbackend.application.ports.CustomerRepositoryPort;
 import com.github.rodmotta.customerbackend.application.ports.CustomerServicePort;
-
-import java.util.List;
 
 public class CustomerService implements CustomerServicePort {
 
@@ -21,18 +20,18 @@ public class CustomerService implements CustomerServicePort {
     }
 
     @Override
-    public List<Customer> findByCarrer(String carrer, PageInfo pageInfo) {
+    public Pagination<Customer> findAll(PageInfo pageInfo) {
+        return customerRepository.findAll(pageInfo);
+    }
+
+    @Override
+    public Pagination<Customer> findByCarrer(String carrer, PageInfo pageInfo) {
         return customerRepository.findByCarrer(carrer, pageInfo);
     }
 
     @Override
-    public List<Customer> findByFirstName(String firstName, PageInfo pageInfo) {
+    public Pagination<Customer> findByFirstName(String firstName, PageInfo pageInfo) {
         return customerRepository.findByFirstName(firstName, pageInfo);
-    }
-
-    @Override
-    public List<Customer> findAll(PageInfo pageInfo) {
-        return customerRepository.findAll(pageInfo);
     }
 
     @Override

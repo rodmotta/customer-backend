@@ -3,15 +3,16 @@ package com.github.rodmotta.customerbackend;
 import com.github.rodmotta.customerbackend.application.domain.Customer;
 import com.github.rodmotta.customerbackend.application.ports.CustomerRepositoryPort;
 import com.github.rodmotta.customerbackend.application.services.CustomerService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootTest
 class CustomerServiceTest {
@@ -62,22 +63,4 @@ class CustomerServiceTest {
         Customer customer = customerService.findById(Mockito.anyLong());
         Assertions.assertEquals(this.customer, customer);
     }
-
-//    @Test
-//    @DisplayName("Must find all customers.")
-//    public void mustFindAllCustomers() {
-//        List<Customer> customersList = Arrays.asList(customer);
-//        Mockito.when(customerRepository.findAll()).thenReturn(customersList);
-//        List<Customer> customers = customerService.findAll();
-//        Assertions.assertEquals(customersList, customers);
-//    }
-//
-//    @Test
-//    @DisplayName("Must find all customers by carrer.")
-//    public void mustFindAllCustomersByCarrer() {
-//        List<Customer> customersList = Arrays.asList(customer);
-//        Mockito.when(customerRepository.findByCarrer(Mockito.anyString())).thenReturn(customersList);
-//        List<Customer> customers = customerService.findByCarrer(Mockito.anyString());
-//        Assertions.assertEquals(customersList, customers);
-//    }
 }
