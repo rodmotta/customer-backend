@@ -39,9 +39,9 @@ public class CustomerController {
     public ResponseEntity<Pagination<CustomerView>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
-            @RequestParam(defaultValue = "id") String propertie,
+            @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "asc") String direction) {
-        PageInfo pageInfo = new PageInfo(page, size, propertie, direction.toUpperCase());
+        PageInfo pageInfo = new PageInfo(page, size, sort, direction.toUpperCase());
         Pagination<Customer> customers = customerService.findAll(pageInfo);
         return ResponseEntity.ok().body(toView(customers));
     }
