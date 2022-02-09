@@ -18,6 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/customers")
+@CrossOrigin(origins = "*")
 @Api(value = "Customer API")
 public class CustomerController {
 
