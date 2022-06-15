@@ -12,6 +12,16 @@ public class Pagination<T> {
     private boolean first;
     private boolean last;
 
+    public Pagination(List<T> content, int totalPages, Long totalElements, int pageNumber, int numberOfElements, boolean first, boolean last) {
+        this.content = content;
+        this.totalPages = totalPages;
+        this.totalElements = totalElements;
+        this.pageNumber = pageNumber;
+        this.numberOfElements = numberOfElements;
+        this.first = first;
+        this.last = last;
+    }
+
     public List<T> getContent() {
         return content;
     }

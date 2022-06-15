@@ -42,11 +42,7 @@ public class CustomerService implements CustomerServicePort {
     @Override
     public Customer update(Long id, Customer customer) {
         Customer customerSaved = findById(id);
-        customerSaved.setFirstName(customer.getFirstName());
-        customerSaved.setLastName(customer.getLastName());
-        customerSaved.setCarrer(customer.getCarrer());
-        customerSaved.setEmail(customer.getEmail());
-        customerSaved.setBirthDate(customer.getBirthDate());
+        customer.setId(customerSaved.getId());
         return customerRepository.save(customerSaved);
     }
 

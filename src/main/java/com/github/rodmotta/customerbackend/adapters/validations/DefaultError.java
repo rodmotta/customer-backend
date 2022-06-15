@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.adapters.exception;
+package com.github.rodmotta.customerbackend.adapters.validations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -12,5 +12,5 @@ import java.util.List;
 public class DefaultError {
     private int code;
     private String message;
-    private List<FieldError> fieldErrors;
+    private List<FieldError> fields;
 }

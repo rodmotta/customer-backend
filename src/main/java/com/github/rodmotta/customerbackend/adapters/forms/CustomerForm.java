@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.adapters.dtos.form;
+package com.github.rodmotta.customerbackend.adapters.forms;
 
 import lombok.Data;
 

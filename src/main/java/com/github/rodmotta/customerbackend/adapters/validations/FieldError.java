@@ -1,4 +1,4 @@
-package com.github.rodmotta.customerbackend.adapters.exception;
+package com.github.rodmotta.customerbackend.adapters.validations;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

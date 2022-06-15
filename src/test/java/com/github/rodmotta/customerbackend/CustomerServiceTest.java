@@ -40,14 +40,8 @@ class CustomerServiceTest {
 
         pageInfo = new PageInfo(1, 1, "id", "ASC");
 
-        pageCustomer = new Pagination<>();
-        pageCustomer.setContent(Arrays.asList(customer, customer));
-        pageCustomer.setPageNumber(1);
-        pageCustomer.setNumberOfElements(7);
-        pageCustomer.setTotalPages(1);
-        pageCustomer.setTotalElements(2L);
-        pageCustomer.setFirst(true);
-        pageCustomer.setLast(true);
+        pageCustomer = new Pagination<>(Arrays.asList(customer, customer), 1,2L,
+                1, 7, true, true);
     }
 
     @Test

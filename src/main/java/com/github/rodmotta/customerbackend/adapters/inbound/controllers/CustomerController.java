@@ -1,55 +1,67 @@
 package com.github.rodmotta.customerbackend.adapters.inbound.controllers;
 
-import com.github.rodmotta.customerbackend.adapters.dtos.form.CustomerForm;
-import com.github.rodmotta.customerbackend.adapters.dtos.view.CustomerView;
+import com.github.rodmotta.customerbackend.adapters.dtos.CustomerDto;
+import com.github.rodmotta.customerbackend.adapters.forms.CustomerForm;
+import com.github.rodmotta.customerbackend.adapters.validations.DefaultError;
 import com.github.rodmotta.customerbackend.application.domain.Customer;
 import com.github.rodmotta.customerbackend.application.domain.PageInfo;
 import com.github.rodmotta.customerbackend.application.domain.Pagination;
 import com.github.rodmotta.customerbackend.application.ports.CustomerServicePort;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.modelmapper.ModelMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/customers")
 @CrossOrigin(origins = "*")
-@Api(value = "Customer API")
 public class CustomerController {
 
     @Autowired
     private CustomerServicePort customerService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @ApiOperation(value = "Find a customer by id.")
+    @Operation(summary = "Find a customer by id.", description = "Find a customer by id.", tags = "Customer")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully performed."),
+        @ApiResponse(responseCode = "404", description = "Customer not found.", content = {
+            @Content(schema = @Schema(implementation = DefaultError.class))})
+    })
     @GetMapping("{id}")
-    public ResponseEntity<CustomerView> findById(@PathVariable Long id) {
+    public ResponseEntity<CustomerDto> findById(@PathVariable Long id) {
         Customer response = customerService.findById(id);
-        return ResponseEntity.ok().body(toView(response));
+        return ResponseEntity.ok().body(convertTo(response));
     }
 
-    @ApiOperation(value = "Find all customers.")
+    @Operation(summary = "Find all customers.", description = "Find all customers.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed.")
+    })
     @GetMapping
-    public ResponseEntity<Pagination<CustomerView>> findAll(
+    public ResponseEntity<Pagination<CustomerDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "id") String sort,
             @RequestParam(defaultValue = "asc") String direction) {
         PageInfo pageInfo = new PageInfo(page, size, sort, direction.toUpperCase());
         Pagination<Customer> customers = customerService.findAll(pageInfo);
-        return ResponseEntity.ok().body(toView(customers));
+        return ResponseEntity.ok().body(convertTo(customers));
     }
 
-    @ApiOperation(value = "Find customers by first name.")
+    @Operation(summary = "Find customers by first name.", description = "Find customers by first name.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed.")
+    })
     @GetMapping(params = "firstName")
-    public ResponseEntity<Pagination<CustomerView>> findByFirst(
+    public ResponseEntity<Pagination<CustomerDto>> findByFirst(
             @RequestParam String firstName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -57,12 +69,15 @@ public class CustomerController {
             @RequestParam(defaultValue = "asc") String direction) {
         PageInfo pageInfo = new PageInfo(page, size, sort, direction.toUpperCase());
         Pagination<Customer> customers = customerService.findByFirstName(firstName, pageInfo);
-        return ResponseEntity.ok().body(toView(customers));
+        return ResponseEntity.ok().body(convertTo(customers));
     }
 
-    @ApiOperation(value = "Find customers by carrer.")
+    @Operation(summary = "Find customers by carrer.", description = "Find customers by carrer.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed.")
+    })
     @GetMapping(params = "carrer")
-    public ResponseEntity<Pagination<CustomerView>> findByCarrer(
+    public ResponseEntity<Pagination<CustomerDto>> findByCarrer(
             @RequestParam String carrer,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -70,39 +85,61 @@ public class CustomerController {
             @RequestParam(defaultValue = "asc") String direction) {
         PageInfo pageInfo = new PageInfo(page, size, sort, direction.toUpperCase());
         Pagination<Customer> customers = customerService.findByCarrer(carrer, pageInfo);
-        return ResponseEntity.ok().body(toView(customers));
+        return ResponseEntity.ok().body(convertTo(customers));
     }
 
-    @ApiOperation(value = "Save a customer.")
+    @Operation(summary = "Save a customer.", description = "Save a customer.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed."),
+            @ApiResponse(responseCode = "400", description = "Validation error.", content = {
+                    @Content(schema = @Schema(implementation = DefaultError.class))})
+    })
     @PostMapping
-    public ResponseEntity<CustomerView> save(@RequestBody @Valid CustomerForm customerForm) {
-        Customer customer = customerService.save(toModel(customerForm));
-        return ResponseEntity.status(HttpStatus.CREATED).body(toView(customer));
+    public ResponseEntity<CustomerDto> save(@RequestBody @Valid CustomerForm customerForm) {
+        Customer customer = customerService.save(convertTo(customerForm));
+        return ResponseEntity.status(HttpStatus.CREATED).body(convertTo(customer));
     }
 
-    @ApiOperation(value = "Update a customer.")
+    @Operation(summary = "Update a customer by id.", description = "Update a customer by id.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed."),
+            @ApiResponse(responseCode = "400", description = "Validation error.", content = {
+                    @Content(schema = @Schema(implementation = DefaultError.class))})
+    })
     @PutMapping("{id}")
-    public ResponseEntity<CustomerView> update(@PathVariable Long id, @RequestBody @Valid CustomerForm customerForm) {
-        Customer customer = customerService.update(id, toModel(customerForm));
-        return ResponseEntity.ok().body(toView(customer));
+    public ResponseEntity<CustomerDto> update(@PathVariable Long id, @RequestBody @Valid CustomerForm customerForm) {
+        Customer customer = customerService.update(id, convertTo(customerForm));
+        return ResponseEntity.ok().body(convertTo(customer));
     }
 
-    @ApiOperation(value = "Delete a customer.")
+    @Operation(summary = "Delete a customer by id.", description = "Delete a customer by id.", tags = "Customer")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully performed."),
+            @ApiResponse(responseCode = "404", description = "Customer not found.", content = {
+                    @Content(schema = @Schema(implementation = DefaultError.class))})
+    })
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         customerService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    private Pagination<CustomerView> toView(Pagination<Customer> customerPagination){
-        return modelMapper.map(customerPagination, Pagination.class);
+    private Pagination<CustomerDto> convertTo(Pagination<Customer> customerPagination){
+        List<CustomerDto> customersDto = customerPagination.getContent().stream()
+                .map(this::convertTo)
+                .collect(Collectors.toList());
+
+        return new Pagination<>(customersDto, customerPagination.getTotalPages(),
+                customerPagination.getTotalElements(), customerPagination.getPageNumber(),
+                customerPagination.getPageNumber(), customerPagination.isFirst(), customerPagination.isLast());
     }
 
-    private CustomerView toView(Customer customer){
-        return modelMapper.map(customer, CustomerView.class);
+    private CustomerDto convertTo(Customer customer){
+        return new CustomerDto(customer);
     }
 
-    private Customer toModel(CustomerForm customerForm){
-        return modelMapper.map(customerForm, Customer.class);
+    private Customer convertTo(CustomerForm customerForm){
+        return new Customer(null, customerForm.getFirstName(), customerForm.getLastName(), customerForm.getBirthDate(),
+                customerForm.getEmail(), customerForm.getCarrer());
     }
 }
