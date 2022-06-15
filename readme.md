@@ -1,23 +1,18 @@
-## Customers
+# ⭐ Customers
+Um projeto de estudo da aplicação da **arquitetura hexagonal** em uma aplicação Rest com Spring, com testes unitários, busca paginada com filtro e ordenação e validação de campos de formualário.
 
-Um projeto de estudo de Rest API com **Java** e **Spring Boot** e aplicando a **arquitetura hexagonal**, testes unitários, busca paginada com filtro e ordenação.
+## 🔧 Técnologias usadas
+* `Java`
+* `Spring`
+* `Maven`
+* `H2 database`
+* `Junit`
+* `Swagger`
 
-[Documentação do Swagger](https://rod-customers.herokuapp.com/swagger-ui.html#/)
+## 📂 Documentação
+A documentação da api foi desenvolvida com Swagger e disponibilizada atravez desse [LINK](https://rod-customers.herokuapp.com/swagger-ui.html#/) onde você pode ver os endpoints e realizar testes.
 
-https://rod-customers.herokuapp.com/api/customers
+## 🚀 Implantação
+A implantação foi realizada no Heroku de forma gratuita, portanto se a sua requisição demorar um pouco, seja paciente. A api pode ser acessada a partir da seguinte url: https://rod-customers.herokuapp.com
 
-|Http Method|Endpoint|Description|
-|---|---|---|
-|GET|/api/customers|Find all customers.|
-|GET|/api/customers/{id}|Find a customer by id.|
-|POST|/api/customers|Save a customer.|
-|PUT|/api/customers/{id}|Update a customer by id.|
-|DELETE|/api/customers/{id}|Delete a customer by id.|
-
----
-
-Frontend desenvolvido por [Gustavo Braz](https://github.com/GustavoBrazThomaz)
-
-https://gus-customers.herokuapp.com/tabela
-
-![image](src/main/resources/static/screenshot.png)
+Frontend desenvolvido por [Gustavo Braz](https://github.com/GustavoBrazThomaz) e disponibilizado em: https://react-customers.herokuapp.com/
